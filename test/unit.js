@@ -49,7 +49,8 @@ describe('GCI: Unit', function () {
     });
 
     it('should succeed with valid basic', function (done) {
-      gci.getRepresentatives('185 Berry Street San Francisco 94107', function (err, resp) {
+      gci.getRepresentatives('2300 Webster St Oakland, CA 94612', function (err, resp) {
+        console.log(JSON.stringify(resp, null, 2));
         expect(resp.kind).to.eql('civicinfo#representativeInfoResponse');
         expect(resp.status).to.eql('success');
         done();
