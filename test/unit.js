@@ -71,5 +71,38 @@ describe('GCI: Unit', function () {
         done();
       });
     });
+
+    it('should allow you to pass includeOffices', function (done) {
+      gci.getRepresentatives('185 Berry Street San Francisco 94107', {
+        includeOffices: false
+      }, function (err, resp) {
+        expect(resp.offices === undefined).to.eql(true);
+        done();
+      });
+    });
+
+    it('should allow you to pass a division id', function (done) {
+      gci.getRepresentatives({
+        includeOffices: true,
+        ocdId: 'ocd-division/country:us/state:ca/county:san_francisco'
+      }, function (err, resp) {
+        expect(resp.divisions['ocd-division/country:us/state:ca/county:san_francisco'])
+          .to.be.an('object');
+        done();
+      });
+    });
+
+    it('should allow you to pass a division id and recursive', function (done) {
+      gci.getRepresentatives({
+        includeOffices: true,
+        ocdId: 'ocd-division/country:us/state:ca/county:san_francisco',
+        recursive: true
+      }, function (err, resp) {
+        expect(resp.divisions['ocd-division/country:us/state:ca/county:san_francisco'])
+          .to.be.an('object');
+        done();
+      });
+    });
+
   });
 });

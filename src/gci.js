@@ -86,6 +86,9 @@ GCI.prototype.getRepresentatives = function (address, config, done) {
   //Build query string
   var query = 'representatives/lookup?key=' + this.apiKey;
   if (config) {
+    Object.keys(config).forEach(function (key) {
+      query = query + '&' + key + '=' + config[key];
+    });
   }
 
   internals.request('post', data, query, function (err, resp) {
