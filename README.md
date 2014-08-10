@@ -20,7 +20,7 @@ var gci = require('google-civic-info')({
 ===
 ##Get Representatives
 This function allows you to retrieve a list of representatives for a given
-address or division.
+address or division ([more_info](https://developers.google.com/civic-information/docs/v1/representatives/representativeInfoQuery)).
 ####```getRepresentatives(address, config, callback)```
 
 Retrieve representatives based on an address string:
