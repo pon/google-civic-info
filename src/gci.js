@@ -30,7 +30,14 @@ internals.request = function (method, data, endpoint, done) {
   };
 
   endpoint = 'https://www.googleapis.com/civicinfo/v1/' + endpoint;
-  needle.request(method, endpoint, data, opts, done);
+  needle.request(method, endpoint, data, opts, function (err, resp) {
+    if (err) { return done(err, null); }
+    if (resp.body.status !== 'success') {
+      done(new errors.RequestError(resp.body.status), null);
+    } else {
+      done(null, resp.body);
+    }
+  });
 }
 
 /**
@@ -82,7 +89,8 @@ GCI.prototype.getRepresentatives = function (address, config, done) {
   }
 
   internals.request('post', data, query, function (err, resp) {
-    done(resp.body);
+    if (err) { return done(err, null); }
+    done(null, resp);
   });
 };
 

@@ -49,9 +49,25 @@ describe('GCI: Unit', function () {
     });
 
     it('should succeed with valid basic', function (done) {
-      gci.getRepresentatives('185 Berry Street San Francisco 94107', function (resp) {
+      gci.getRepresentatives('185 Berry Street San Francisco 94107', function (err, resp) {
         expect(resp.kind).to.eql('civicinfo#representativeInfoResponse');
         expect(resp.status).to.eql('success');
+        done();
+      });
+    });
+
+    it('should return error with no address', function (done) {
+      gci.getRepresentatives('', function (err, resp) {
+        expect(err).to.be.an.instanceOf(errors.RequestError);
+        expect(err.message).to.contain('noAddressParameter');
+        done();
+      });
+    });
+
+    it('should return error with invalid address', function (done) {
+      gci.getRepresentatives('asdf asdf', function (err, resp) {
+        expect(err).to.be.an.instanceOf(errors.RequestError);
+        expect(err.message).to.contain('addressUnparseable');
         done();
       });
     });
