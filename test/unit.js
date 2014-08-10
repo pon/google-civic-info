@@ -50,7 +50,6 @@ describe('GCI: Unit', function () {
 
     it('should succeed with valid basic', function (done) {
       gci.getRepresentatives('2300 Webster St Oakland, CA 94612', function (err, resp) {
-        console.log(JSON.stringify(resp, null, 2));
         expect(resp.kind).to.eql('civicinfo#representativeInfoResponse');
         expect(resp.status).to.eql('success');
         done();
@@ -104,6 +103,15 @@ describe('GCI: Unit', function () {
         done();
       });
     });
+  });
 
+  describe('getElections', function () {
+    it('should return a list of elections available to query', function (done) {
+      gci.getElections(function (err, data) {
+        expect(data.kind).to.eql('civicinfo#electionsQueryResponse');
+        expect(data.elections).to.be.an('array');
+        done();
+      });
+    });
   });
 });

@@ -2,6 +2,7 @@ var needle      = require('needle');
 var errors      = require('./errors');
 
 var internals = {};
+var BASE_URL = 'https://www.googleapis.com/civicinfo/v1/';
 
 /**
  * Constructor
@@ -24,12 +25,12 @@ var GCI = function (config) {
  * @param {String} endpoint
  * @param {Function} done
  */
-internals.request = function (method, data, endpoint, done) {
+internals.repRequest = function (method, data, endpoint, done) {
   var opts = {
     json: true
   };
 
-  endpoint = 'https://www.googleapis.com/civicinfo/v1/' + endpoint;
+  endpoint = BASE_URL + endpoint;
   needle.request(method, endpoint, data, opts, function (err, resp) {
     if (err) { return done(err, null); }
     if (resp.body.status !== 'success') {
@@ -45,6 +46,7 @@ internals.request = function (method, data, endpoint, done) {
  * @author Peter Nagel
  * @param {String} address Google formatted address string
  * @param {Object} config optional parameters for request
+ * @param {Function} done callback with (err, data) signature
  */
 GCI.prototype.getRepresentatives = function (address, config, done) {
   //Handle no address, with config object
@@ -91,9 +93,22 @@ GCI.prototype.getRepresentatives = function (address, config, done) {
     });
   }
 
-  internals.request('post', data, query, function (err, resp) {
+  internals.repRequest('post', data, query, function (err, resp) {
     if (err) { return done(err, null); }
     done(null, resp);
+  });
+};
+
+/**
+ * Retrieve available elections to query
+ * @author Peter Nagel
+ * @param {Function} done callback with err, data, signature
+ */
+GCI.prototype.getElections = function (done) {
+  var endpoint = BASE_URL + 'elections?key=' + this.apiKey;
+  needle.get(endpoint, function (err, resp) {
+    if (err) { return done(err, null); }
+    done(null, resp.body);
   });
 };
 
